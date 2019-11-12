@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+<style>
+    small {
+        font-size: 70%;
+        font-weight: 400;
+        opacity: 0.7;
+    }
+    .error {
+        color: red !important;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="ui right aligned grid">
+        <div class="sixteen wide column">
+            <div class="ui segment">
+                <a href="{{ path('show_store_list') }}" class="ui secondary button">Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="ui grid">
+        <div class="six wide column">
+            <h2>Add New Store</h2>
+            <div class="ui form">
+                {{ form_start(form) }}
+
+                <div class="field">
+                    {{ form_row(form.id) }}
+                </div>
+                <div class="field">
+                    {{ form_row(form.storeName) }}
+                </div>
+                <button class="ui button">Submit</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css" type="text/css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.11/dist/css/select2.min.css" />
+    <style type="text/css">
+        body {
+            background-color: #DADADA;
+        }
+        body > .grid {
+            height: 100%;
+        }
+        .ui.modal .close.cancel.icon {
+            display:none;
+        }
+        .ui.bottom.attached.segment.pushable{
+            border: 0;
+        }
+
+        .ui.basic.segment{
+            min-height:500px !important;
+        }
+
+        ul.pagination {
+            margin:20px;
+            padding:0px;
+        }
+
+        ul.pagination > li{
+            display:inline;
+            list-style: none;
+            border: 1px solid rgba(34,36,38,.15);
+            margin:0px;
+            padding:5px 8px;
+            margin:2px;
+            border-radius:.28571429rem
+        }
+
+        ul.pagination > li > a{
+            margin:0px;
+            padding:0px;
+            color:rgba(0,0,0,.87);
+        }
+
+        ul.pagination > li.active {
+            background-color:rgba(34,36,38,.15);
+        }
+
+        .ui.message .header {
+            display:none !important;
+        }
+        .ui.icon.message>.icon:not(.close) {
+            font-size: 2em !important;
+        }
+
+    </style>
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<ul style="list-style: none; margin: 0px; padding: 0px; border-bottom: #202122 solid 1px;">
+    <li style="display: inline;"><button id="left-sidebar-toggle" class="ui black big launch right attached fixed toggle button"><i class="content icon"></i></button></li>
+    <li style="display: inline;">
+        <h2 class="ui header black" style="display: inline; line-height: 42px;">
+            <div class="content">
+                <i class="user md icon"></i>Store Branch Managment&trade; - {{ app.request.getBaseUrl }}
+            </div>
+        </h2>
+    </li>
+</ul>
+<div class="ui bottom attached segment pushable">
+    <div class="ui inverted left vertical menu sidebar">
+        <a href="{{ path("create_update_store") }}" class="item">
+            <i class="plus icon"></i>
+            Add Store
+        </a>
+        <a href="{{ path("create_update_store_branch") }}" class="item">
+            <i class="plus icon"></i>
+            Add Branch Location
+        </a>
+    </div>
+    <div class="grid">
+        <div class="ten wide column">
+{#            {{ include('flash-message') }}#}
+            <div class="" style="display: none" id="ajax-alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            </div>
+        </div>
+    </div>
+    <div class="pusher">
+        <div class="ui basic segment">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.11/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var pusher_width = $( window ).width() - $('.menu.sidebar').width();
+        $('.pusher').width(pusher_width + 'px');
+        $('.menu.sidebar').sidebar({
+            dimPage: false,
+            closable: false
+        }).sidebar('show');
+        $('#left-sidebar-toggle').click(function(){
+            var width = $('.menu.sidebar').hasClass('visible') ? '100%' : pusher_width + 'px';
+            $('.menu.sidebar').sidebar('toggle');
+            $('.pusher').width(width);
+        });
+        $('select.dropdown').dropdown();
+        $('.input-calendar').calendar();
+    });
+</script>
+
+{% block javascripts %}{% endblock %}
+</html>

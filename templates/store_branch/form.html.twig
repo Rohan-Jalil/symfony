@@ -1,0 +1,121 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+<style>
+    small {
+        font-size: 70%;
+        font-weight: 400;
+        opacity: 0.7;
+    }
+    .error {
+        color: red !important;
+    }
+    #map_canvas {
+        width: 600px;
+        height: 500px;
+    }
+    #current {
+        padding-top: 25px;
+    }
+    .ui.message .header {
+        display: block !important;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="ui right aligned grid">
+        <div class="sixteen wide column">
+            <div class="ui segment">
+                <a href="{{ path('create_update_store') }}" class="ui secondary button">Add Store</a>
+                <a href="{{ path('show_store_list') }}" class="ui secondary button">Back</a>
+            </div>
+        </div>
+    </div>
+    {% if (errors) %}
+    <div class="ui error message">
+        <i class="close icon"></i>
+        <div class="header">
+            There were some errors with your submission
+        </div>
+        <ul class="list">
+            <li>{{ errors }}</li>
+        </ul>
+    </div>
+    {% endif %}
+    <div class="ui grid">
+        <div class="six wide column">
+            <h2>Add New Branch</h2>
+            <div class="ui form">
+                {{ form_start(form) }}
+
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+                <div class="field">
+                    {{ form_row(form.id) }}
+                </div>
+                <div class="field">
+                    {{ form_row(form.store) }}
+                </div>
+                <div class="field">
+                    {{ form_row(form.name) }}
+                </div>
+                <div class="field">
+                    {{ form_row(form.street) }}
+                </div>
+                <div class="field">
+                    {{ form_row(form.county) }}
+                </div>
+                <div class="field">
+                    {{ form_row(form.state) }}
+                </div>
+                <div class="field">
+                    {{ form_row(form.zipcode) }}
+                </div>
+                <div class="field">
+                    {{ form_row(form.numberOfEmployees) }}
+                </div>
+                <br>
+                <button class="ui button">Submit</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="six wide column">
+            <section>
+                <div id='map_canvas'></div>
+                <div id="current">Nothing yet...</div>
+            </section>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+    <script>
+        var map = new google.maps.Map(document.getElementById('map_canvas'), {
+            zoom: 1,
+            center: new google.maps.LatLng(39.251, -101.615),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        var myMarker = new google.maps.Marker({
+            position: new google.maps.LatLng(47.651968, 9.478485),
+            draggable: true
+        });
+
+        google.maps.event.addListener(myMarker, 'dragend', function (evt) {
+            $('#latitude').val(evt.latLng.lat());
+            $('#longitude').val(evt.latLng.lng());
+            document.getElementById('current').innerHTML = '<p>Marker dropped: Current Lat: ' + evt.latLng.lat().toFixed(3) + ' Current Lng: ' + evt.latLng.lng().toFixed(3) + '</p>';
+        });
+
+        google.maps.event.addListener(myMarker, 'dragstart', function (evt) {
+            document.getElementById('current').innerHTML = '<p>Currently dragging marker...</p>';
+        });
+
+        map.setCenter(myMarker.position);
+        myMarker.setMap(map);
+    </script>
+{% endblock %}

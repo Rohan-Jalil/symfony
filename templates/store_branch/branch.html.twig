@@ -1,0 +1,56 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="ui right aligned grid">
+        <div class="sixteen wide column">
+            <div class="ui segment">
+                <a href="{{ path('show_store_list') }}" class="ui secondary button">Back</a>
+                <a href="{{ path('create_update_store_branch', {'id' : branch.id}) }}" class="ui secondary button">Update</a>
+                <a href="{{ path('delete_store_branch', {'id' : branch.id}) }}" class="ui secondary button" id="delete-store-branch">Delete</a>
+                <a href="{{ path('create_update_store_branch') }}" class="ui secondary button">Add New</a>
+            </div>
+        </div>
+    </div>
+    <h2>{{ branch.store.storeName }}</h2>
+    <div class="ui table">
+        <table class="ui celled padded table">
+            <tr>
+                <th><i class="book icon"></i>Name</th>
+                <td>{{ branch.name }}</td>
+            </tr>
+            <tr>
+                <th><i class="marker icon"></i>Address</th>
+                <td>{{ branch.street ~ ', ' ~ branch.county ~ ' ' ~ branch.state ~ ' ' ~ branch.zipcode }}</td>
+            </tr>
+            <tr>
+                <th><i class="group icon"></i>Employee Count</th>
+                <td>{{ branch.numberOfEmployees }}</td>
+            </tr>
+            <tr>
+                <th><i class="clock icon"></i>Created At</th>
+                <td>{{ branch.createdAt|date }}</td>
+            </tr>
+            <tr>
+                <th><i class="clock icon"></i>Updated At</th>
+                <td>{{ branch.updatedAt|date }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('#delete-store-branch').click(function(){
+            if (confirm("Are you sure?")) {
+                $.ajax({
+                    'url' : "{{ path('delete_store_branch', {'id' : branch.id}) }}",
+                    'method' : 'DELETE',
+                    'success' : function(data){
+                        window.location.href = "/";
+                    }
+                });
+            }
+            return false;
+        });
+    </script>
+{% endblock %}
